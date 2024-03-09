@@ -200,6 +200,12 @@ bool gameLogic(float deltaTime)
 
 	//ImGui::ShowDemoWindow();
 
+	ImGui::Begin("debug");
+
+	ImGui::Text("Bullets count: %d", (int)data.bullets.size());
+
+	ImGui::End();
+
 	return true;
 
 }
