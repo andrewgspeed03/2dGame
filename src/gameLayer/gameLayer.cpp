@@ -15,13 +15,15 @@
 
 gl2d::Renderer2D renderer;
 
+gl2d::Texture spaceShipTexture;
+
 bool initGame()
 {
 	//initializing stuff for the renderer
 	gl2d::init();
 	renderer.create();
 
-	
+	spaceShipTexture.loadFromFile(RESOURCES_PATH "spaceShip/ships/green.png", true);
 	
 	return true;
 }
