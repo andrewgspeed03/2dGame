@@ -21,7 +21,7 @@ GameplayData data;
 
 gl2d::Renderer2D renderer;
 
-constexpr int BACKGROUNDS = 3;
+constexpr int BACKGROUNDS = 4;
 
 gl2d::Texture spaceShipTexture;
 gl2d::Texture backgroundTexture[BACKGROUNDS];
@@ -39,13 +39,15 @@ bool initGame()
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
 	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
 	backgroundTexture[2].loadFromFile(RESOURCES_PATH "background3.png", true);
-	
+	backgroundTexture[3].loadFromFile(RESOURCES_PATH "background4.png", true);
+
 	for(int i = 0; i < BACKGROUNDS; i++)
 		tiledRenderer[i].texture = backgroundTexture[i];
 
 	tiledRenderer[0].paralaxStrength = 0;
-	tiledRenderer[1].paralaxStrength = 0.5;
-	tiledRenderer[2].paralaxStrength = 0.7;
+	tiledRenderer[1].paralaxStrength = 0.2;
+	tiledRenderer[2].paralaxStrength = 0.4;
+	tiledRenderer[3].paralaxStrength = 0.7;
 
 	return true;
 }
@@ -101,14 +103,16 @@ bool gameLogic(float deltaTime)
 	if (move.x != 0 || move.y != 0)
 	{
 		move = glm::normalize(move);
-		move *= deltaTime * 200; // 200 pixels per sec
+		move *= deltaTime * 2000; // 2000 pixels per sec
 		data.playerPos += move; 
 	}
 #pragma endregion
 
 #pragma region follow
 
+	renderer.currentCamera.follow(data.playerPos, deltaTime * 1450, 1, 50, w, h);
 
+#pragma endregion
 
 #pragma region render background
 
@@ -143,6 +147,7 @@ bool gameLogic(float deltaTime)
 		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f);
 
 #pragma endregion
+
 	renderer.flush();
 
 
