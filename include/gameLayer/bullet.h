@@ -10,4 +10,5 @@ struct  Bullet
         gl2d::Texture bulletsTexture,
     gl2d::TextureAtlasPadding bulletsAtlas);
 
+    void update(float deltaTime);
 };

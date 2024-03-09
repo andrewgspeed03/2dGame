@@ -163,6 +163,21 @@ bool gameLogic(float deltaTime)
 		data.bullets.push_back(b);
 	}
 
+	for(int i = 0; i < data.bullets.size(); i++){
+
+		if(glm::distance(data.bullets[i].position, data.playerPos) > 5000){
+			data.bullets.erase(data.bullets.begin() + i);
+			i--;
+			continue;
+		}
+
+		data.bullets[i].update(deltaTime);
+	}
+
+#pragma endregion
+
+#pragma region render bullets
+
 	for (auto &b : data.bullets)
 		b.render(renderer, bulletsTexture, bulletsAtlas);
 
