@@ -11,10 +11,14 @@
 #include <gl2d/gl2d.h>
 #include <platformTools.h>
 #include <tiledRenderer.h>
+#include <bullet.h>
+#include <vector>
 
 struct GameplayData
 {
 	glm::vec2 playerPos = {100,100};
+
+	std::vector<Bullet> bullets;
 };
 
 GameplayData data;
@@ -23,7 +27,12 @@ gl2d::Renderer2D renderer;
 
 constexpr int BACKGROUNDS = 4;
 
-gl2d::Texture spaceShipTexture;
+gl2d::Texture spaceShipsTexture;
+gl2d::TextureAtlasPadding spaceShipsAtlas;
+
+gl2d::Texture bulletsTexture;
+gl2d::TextureAtlasPadding bulletsAtlas;
+
 gl2d::Texture backgroundTexture[BACKGROUNDS];
 
 TiledRenderer tiledRenderer[BACKGROUNDS];
@@ -34,7 +43,13 @@ bool initGame()
 	gl2d::init();
 	renderer.create();
 
-	spaceShipTexture.loadFromFile(RESOURCES_PATH "spaceShip/ships/green.png", true);
+	spaceShipsTexture.loadFromFileWithPixelPadding(
+		RESOURCES_PATH "spaceShip/stitchedFiles/spaceships.png", 128, true);
+	spaceShipsAtlas = gl2d::TextureAtlasPadding(5, 2, spaceShipsTexture.GetSize().x, spaceShipsTexture.GetSize().y);
+
+	bulletsTexture.loadFromFileWithPixelPadding(
+		RESOURCES_PATH "spaceShip/stitchedFiles/projectiles.png", 500, true);
+	bulletsAtlas = gl2d::TextureAtlasPadding(3, 2, bulletsTexture.GetSize().x, bulletsTexture.GetSize().y);
 	
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
 	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
@@ -110,7 +125,7 @@ bool gameLogic(float deltaTime)
 
 #pragma region follow
 
-	renderer.currentCamera.follow(data.playerPos, deltaTime * 1450, 1, 50, w, h);
+	renderer.currentCamera.follow(data.playerPos, deltaTime * 550, 1, 150, w, h);
 
 #pragma endregion
 
@@ -137,14 +152,31 @@ bool gameLogic(float deltaTime)
 
 #pragma endregion
 
+#pragma region handle bullets
+
+	if(platform::isLMousePressed()){
+		Bullet b;
+
+		b.position = data.playerPos;
+		b.fireDirection = mouseDirection;
+
+		data.bullets.push_back(b);
+	}
+
+	for (auto &b : data.bullets)
+		b.render(renderer, bulletsTexture, bulletsAtlas);
+
+#pragma endregion
+
 #pragma region render ship
 	
 	constexpr float SHIP_SIZE = 250.f;
 
 	renderer.renderRectangle(
 		{data.playerPos - glm::vec2(SHIP_SIZE / 2, SHIP_SIZE / 2), SHIP_SIZE, SHIP_SIZE},
-		spaceShipTexture,
-		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f);
+		spaceShipsTexture,
+		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f,
+		spaceShipsAtlas.get(1,0));
 
 #pragma endregion
 
