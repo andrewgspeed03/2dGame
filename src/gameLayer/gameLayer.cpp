@@ -53,7 +53,7 @@ bool initGame()
 
 
 bool gameLogic(float deltaTime)
-{
+{	
 #pragma region init stuff
 	int w = 0; int h = 0;
 	w = platform::getFrameBufferSizeX(); //window w
@@ -64,8 +64,9 @@ bool gameLogic(float deltaTime)
 
 	renderer.updateWindowMetrics(w, h);
 
-#pragma region movement
+#pragma endregion
 
+#pragma region movement
 	glm::vec2 move = {};
 
 	if(
@@ -103,6 +104,11 @@ bool gameLogic(float deltaTime)
 		move *= deltaTime * 200; // 200 pixels per sec
 		data.playerPos += move; 
 	}
+#pragma endregion
+
+#pragma region follow
+
+
 
 #pragma region render background
 
@@ -110,18 +116,39 @@ bool gameLogic(float deltaTime)
 		tiledRenderer[i].render(renderer);
 
 #pragma endregion
+
+#pragma region mouse pos
+
+	glm::vec2 mousePos = platform::getRelMousePosition();
+	glm::vec2 screenCenter(w / 2.f, h / 2.f);
+
+	glm::vec2 mouseDirection = mousePos - screenCenter;
+
+	if(glm::length(mouseDirection) == 0.f)
+		mouseDirection = {1,0};
+	else
+		mouseDirection = normalize(mouseDirection);
+
+	float spaceShipAngle = atan2(mouseDirection.y, -mouseDirection.x);
+
+#pragma endregion
+
+#pragma region render ship
 	
-	renderer.currentCamera.follow(data.playerPos, deltaTime * 150, 10, 200, w, h);
+	constexpr float SHIP_SIZE = 250.f;
 
-	renderer.renderRectangle({data.playerPos.x, data.playerPos.y, 200, 200}, spaceShipTexture);
+	renderer.renderRectangle(
+		{data.playerPos - glm::vec2(SHIP_SIZE / 2, SHIP_SIZE / 2), SHIP_SIZE, SHIP_SIZE},
+		spaceShipTexture,
+		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f);
 
+#pragma endregion
 	renderer.flush();
 
 
 	//ImGui::ShowDemoWindow();
 
 	return true;
-
 
 }
 
