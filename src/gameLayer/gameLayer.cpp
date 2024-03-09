@@ -13,12 +13,15 @@
 #include <tiledRenderer.h>
 #include <bullet.h>
 #include <vector>
+#include <enemy.h>
 
 struct GameplayData
 {
 	glm::vec2 playerPos = {100,100};
 
 	std::vector<Bullet> bullets;
+
+	std::vector<Enemy> enemies;
 };
 
 GameplayData data;
@@ -183,6 +186,21 @@ bool gameLogic(float deltaTime)
 
 #pragma endregion
 
+#pragma region handle enemies
+
+	for(int i = 0; i < data.enemies.size(); i++){
+		data.enemies[i].update(deltaTime, data.playerPos);
+	}
+
+#pragma endregion
+
+#pragma region render enemies
+
+	for(auto &e : data.enemies)
+		e.render(renderer, spaceShipsTexture, spaceShipsAtlas);
+
+#pragma endregion
+
 #pragma region render ship
 	
 	constexpr float shipSize = 250.f;
@@ -200,6 +218,22 @@ bool gameLogic(float deltaTime)
 	ImGui::Begin("debug");
 
 	ImGui::Text("Bullets count: %d", (int)data.bullets.size());
+	ImGui::Text("Enemies count: %d", (int)data.enemies.size());
+
+	if (ImGui::Button("Spawn enemy")){
+
+		glm::uvec2 shipTypes[] = {{0,0},{0,1}, {2,0}, {3, 1}};
+
+		Enemy e;
+		e.position = data.playerPos;
+
+		e.speed = 700 + rand() % 100;
+		e.turnSpeed = 2.f + (rand() % 1000) / 500.f;
+		e.type = shipTypes[rand() % 4];
+
+		data.enemies.push_back(e);
+
+	}
 
 	ImGui::End();
 

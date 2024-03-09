@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "xutility": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "format": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
