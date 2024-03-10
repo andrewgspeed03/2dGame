@@ -213,6 +213,8 @@ bool gameLogic(float deltaTime){
 		b.fireDirection = mouseDirection;
 
 		data.bullets.push_back(b);
+
+		PlaySound(shootSound);
 	}
 
 	for(int i = 0; i < data.bullets.size(); i++){
@@ -329,8 +331,10 @@ bool gameLogic(float deltaTime){
 			b.speed = data.enemies[i].bulletSpeed;
 			
 			b.isEnemy = true;
-
 			data.bullets.push_back(b);
+
+			if(!IsSoundPlaying(shootSound)) 
+				PlaySound(shootSound);
 		}
 	}
 
