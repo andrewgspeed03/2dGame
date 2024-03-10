@@ -42,6 +42,8 @@ TiledRenderer tiledRenderer[BACKGROUNDS];
 
 void restartGame(){
 	data = {};
+	renderer.currentCamera.follow(data.playerPos,
+		550, 0, 0, renderer.windowW, renderer.windowH);
 }
 
 bool initGame()
@@ -70,6 +72,8 @@ bool initGame()
 	tiledRenderer[1].paralaxStrength = 0.2;
 	tiledRenderer[2].paralaxStrength = 0.4;
 	tiledRenderer[3].paralaxStrength = 0.7;
+
+	restartGame();
 
 	return true;
 }
