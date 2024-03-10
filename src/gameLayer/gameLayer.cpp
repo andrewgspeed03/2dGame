@@ -138,6 +138,8 @@ bool gameLogic(float deltaTime)
 
 #pragma region render background
 
+	renderer.currentCamera.zoom = 0.5;
+
 	for(int i = 0; i < BACKGROUNDS; i++)
 		tiledRenderer[i].render(renderer);
 

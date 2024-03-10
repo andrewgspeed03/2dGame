@@ -3,7 +3,7 @@
 
 struct  TiledRenderer
 {
-    float backgroundSize = 1000;
+    float backgroundSize = 10000;
     gl2d::Texture texture;
 
     float paralaxStrength = 1;
