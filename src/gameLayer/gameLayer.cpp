@@ -40,7 +40,9 @@ gl2d::Texture backgroundTexture[BACKGROUNDS];
 
 TiledRenderer tiledRenderer[BACKGROUNDS];
 
-void 
+void restartGame(){
+	data = {};
+}
 
 bool initGame()
 {
@@ -252,6 +254,9 @@ bool gameLogic(float deltaTime)
 		data.enemies.push_back(e);
 
 	}
+
+	if(ImGui::Button("Reset Game"))
+		restartGame();
 
 	ImGui::End();
 
