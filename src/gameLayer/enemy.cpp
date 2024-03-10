@@ -8,7 +8,7 @@ void Enemy::render(gl2d::Renderer2D &renderer,
 
     }
 
-void Enemy::update(float deltaTime, glm::vec2 playerPosition){
+bool Enemy::update(float deltaTime, glm::vec2 playerPosition){
 
     glm::vec2 directionToPlayer = playerPosition - position;
     if(glm::length(directionToPlayer) == 0)
@@ -18,13 +18,24 @@ void Enemy::update(float deltaTime, glm::vec2 playerPosition){
 
     glm::vec2 newDirection = {};
 
-    if(glm::length(directionToPlayer + viewDirection) <= 0.2)
+    bool shoot = (glm::length(directionToPlayer + viewDirection) >= fireRange);
 
+    if(shoot)
+        if(firedTime <= 0.f)
+            firedTime = fireTimeReset;
+        else
+            shoot = 0;
+
+    firedTime -= deltaTime;
+    if (firedTime < 0)
+        firedTime = 0.f;
+
+    if(glm::length(directionToPlayer + viewDirection) <= 0.2){
         if(rand() % 2)
             newDirection = glm::vec2(directionToPlayer.y, -directionToPlayer.x);
         else
             newDirection = glm::vec2(-directionToPlayer.y, directionToPlayer.x);
-    
+    }
     else
         newDirection = deltaTime * turnSpeed * directionToPlayer * viewDirection;
 
@@ -35,4 +46,5 @@ void Enemy::update(float deltaTime, glm::vec2 playerPosition){
 
     position += viewDirection * deltaTime * speed * length;
 
+    return shoot;
 }

@@ -40,6 +40,8 @@ gl2d::Texture backgroundTexture[BACKGROUNDS];
 
 TiledRenderer tiledRenderer[BACKGROUNDS];
 
+void 
+
 bool initGame()
 {
 	//initializing stuff for the renderer
@@ -197,8 +199,13 @@ bool gameLogic(float deltaTime)
 			continue;
 			
 		}
+		if(data.enemies[i].update(deltaTime, data.playerPos)){
+			Bullet b;
+			b.position = data.enemies[i].position;
+			b.fireDirection = data.enemies[i].viewDirection;
 
-		data.enemies[i].update(deltaTime, data.playerPos);
+			data.bullets.push_back(b);
+		}
 	}
 
 #pragma endregion
@@ -236,8 +243,10 @@ bool gameLogic(float deltaTime)
 		Enemy e;
 		e.position = data.playerPos;
 
-		e.speed = 700 + rand() % 100;
-		e.turnSpeed = 2.f + (rand() % 1000) / 500.f;
+		e.speed = 800 + rand() % 1000;
+		e.turnSpeed = 2.2f + (rand() % 1000) / 500.f;
+		e.fireRange = 1.5 + (rand() % 1000) / 2000.f;
+		e.fireTimeReset = 0.1 + (rand() % 1000) /500;
 		e.type = shipTypes[rand() % 4];
 
 		data.enemies.push_back(e);
