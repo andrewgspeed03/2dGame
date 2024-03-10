@@ -218,7 +218,12 @@ bool gameLogic(float deltaTime)
 
 		glm::vec4 newRect = healthBox();
 		newRect.z *= data.health;
-		renderer.renderRectangle(newRect, health);
+
+		glm::vec4 textCoords = {0,1,1,0};
+		textCoords.z *= data.health;
+
+		renderer.renderRectangle(newRect, health, Colors_White, {}, {},
+		textCoords);
 	}
 	renderer.popCamera();
 
