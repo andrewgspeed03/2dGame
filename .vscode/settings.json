@@ -2,7 +2,23 @@
     "files.associations": {
         "xutility": "cpp",
         "random": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "array": "cpp",
+        "iterator": "cpp",
+        "list": "cpp",
+        "set": "cpp",
+        "vector": "cpp",
+        "xhash": "cpp",
+        "xtree": "cpp",
+        "istream": "cpp",
+        "memory": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

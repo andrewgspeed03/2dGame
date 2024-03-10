@@ -15,6 +15,7 @@
 #include <vector>
 #include <enemy.h>
 #include <glui/glui.h>
+#include <raudio.h>
 
 struct GameplayData
 {
@@ -47,7 +48,7 @@ TiledRenderer tiledRenderer[BACKGROUNDS];
 gl2d::Texture healthBar;
 gl2d::Texture health;
 
-
+Sound shootSound;
 
 bool intersectBullet(glm::vec2 bulletPos, glm::vec2 shipPos, float shipSize){
 	return glm::distance(bulletPos, shipPos) <= shipSize;
@@ -75,6 +76,8 @@ bool initGame()
 	
 	healthBar.loadFromFile(RESOURCES_PATH "healthBar.png");
 	health.loadFromFile(RESOURCES_PATH "health.png");
+
+	shootSound = LoadSound(RESOURCES_PATH "shoot.flac");
 
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
 	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
@@ -323,6 +326,8 @@ bool gameLogic(float deltaTime){
 			Bullet b;
 			b.position = data.enemies[i].position;
 			b.fireDirection = data.enemies[i].viewDirection;
+			b.speed = data.enemies[i].bulletSpeed;
+			
 			b.isEnemy = true;
 
 			data.bullets.push_back(b);
@@ -369,6 +374,7 @@ bool gameLogic(float deltaTime){
 		e.fireRange = 1.5 + (rand() % 1000) / 2000.f;
 		e.fireTimeReset = 0.1 + (rand() % 1000) /500;
 		e.type = shipTypes[rand() % 4];
+		e.bulletSpeed = rand() % 3000 + 1000;
 
 		data.enemies.push_back(e);
 
