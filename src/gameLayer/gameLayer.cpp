@@ -23,6 +23,8 @@ struct GameplayData
 	std::vector<Bullet> bullets;
 
 	std::vector<Enemy> enemies;
+
+	float health = 1.f; //player's life 0 -> 1
 };
 
 GameplayData data;
@@ -214,6 +216,9 @@ bool gameLogic(float deltaTime)
 
 		renderer.renderRectangle(healthBox, healthBar);
 
+		glm::vec4 newRect = healthBox();
+		newRect.z *= data.health;
+		renderer.renderRectangle(newRect, health);
 	}
 	renderer.popCamera();
 
@@ -286,6 +291,8 @@ bool gameLogic(float deltaTime)
 
 	if(ImGui::Button("Reset Game"))
 		restartGame();
+
+	ImGui::SliderFloat("Player Health", &data.health, 0, 1);
 
 	ImGui::End();
 
