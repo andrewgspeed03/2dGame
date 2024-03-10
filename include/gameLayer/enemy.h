@@ -20,6 +20,8 @@ struct Enemy
 
     glm::vec2 viewDirection = {1,0};
 
+    float life = 1.f;
+
     void render(gl2d::Renderer2D &renderer, gl2d::Texture &sprites, gl2d::TextureAtlasPadding &atlas);
 
     bool update(float deltaTimem, glm::vec2 playerPos);
