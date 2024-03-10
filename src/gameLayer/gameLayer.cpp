@@ -27,7 +27,7 @@ struct GameplayData
 
 	float health = 1.f; //player's life 0 -> 1
 
-	float spawnEnemyTimerSeconds = 10.f;
+	float spawnEnemyTimerSeconds = 5.f;
 };
 
 GameplayData data;
@@ -49,6 +49,8 @@ gl2d::Texture healthBar;
 gl2d::Texture health;
 
 Sound shootSound;
+
+Music backgroundMusic;
 
 bool intersectBullet(glm::vec2 bulletPos, glm::vec2 shipPos, float shipSize){
 	return glm::distance(bulletPos, shipPos) <= shipSize;
@@ -78,6 +80,8 @@ bool initGame()
 	health.loadFromFile(RESOURCES_PATH "health.png");
 
 	shootSound = LoadSound(RESOURCES_PATH "shoot.flac");
+
+	backgroundMusic = LoadMusicStream(RESOURCES_PATH "backgroundMusic.flac");
 
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
 	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
@@ -280,7 +284,7 @@ bool gameLogic(float deltaTime){
 
 	renderer.pushCamera();
 	{
-
+	
 		glui::Frame f({0,0, w, h});
 
 		glui::Box healthBox = glui::Box().xLeftPerc(0.65).yTopPerc(0.1).
@@ -305,12 +309,15 @@ bool gameLogic(float deltaTime){
 
 	if(data.enemies.size() < 15){
 		data.spawnEnemyTimerSeconds -= deltaTime;
+		if(!IsMusicPlaying(backgroundMusic))
+			PlayMusicStream(backgroundMusic);
 
 		if(data.spawnEnemyTimerSeconds < 0){
 			data.spawnEnemyTimerSeconds = rand() % 5 + 1;
 
 			spawnEnemy();
 			if(rand() % 3 == 0)
+				spawnEnemy();
 				spawnEnemy();
 		}
 	}
