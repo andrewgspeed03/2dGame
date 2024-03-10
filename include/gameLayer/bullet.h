@@ -11,4 +11,6 @@ struct  Bullet
     gl2d::TextureAtlasPadding bulletsAtlas);
 
     void update(float deltaTime);
+
+    bool isEnemy = 0;
 };
