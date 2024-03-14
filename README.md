@@ -44,7 +44,6 @@ After you add a file, the changes should be automatically added but if you want 
   Look at the example provided to see how to acces user input.
   Also you have to use the RESOURCES_PATH macro to get to your assets path.
 
-  [FULL EXAMPLE VIDEO!](https://www.youtube.com/watch?v=zJoXMfCI9LM)
   
 # Configurations:
 
